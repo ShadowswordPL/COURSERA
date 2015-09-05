@@ -1,0 +1,131 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+<title>Forth assigment</title>
+
+<script id="vertex-shader" type="x-shader/x-vertex">
+  attribute  vec4 vPosition;
+  attribute  vec3 vNormal;
+  varying vec4 fColor;
+
+  uniform vec4 ambientProduct, diffuseProduct, specularProduct;
+  uniform vec4 lightPosition1;
+  uniform vec4 lightPosition2;
+  uniform float shininess;
+  uniform float firstSourceOn;
+  uniform float secondSourceOn;
+  void main()
+  {
+    vec3 pos = -vPosition.xyz;
+    vec3 light1 = -lightPosition1.xyz;
+    vec3 light2 = -lightPosition2.xyz;
+    vec3 L1 = normalize(light1 - pos);
+    vec3 L2 = normalize(light2 - pos);
+
+    vec3 E = normalize(pos);
+    vec3 H1 = normalize(L1 + E);
+    vec3 H2 = normalize(L2 + E);
+    
+    // Transform vertex normal into eye coordinates
+    vec3 N = normalize(vNormal);
+
+    // Compute terms in the illumination equation
+    vec4 ambient = ambientProduct;
+
+    vec4 diffuse1 = max(dot(L1, N), 0.0) * diffuseProduct;
+    vec4 specular1 = pow(max(dot(N, H1), 0.0), shininess) * specularProduct;
+    
+    vec4 diffuse2 = max(dot(L2, N), 0.0 )*diffuseProduct;
+    vec4 specular2 = pow(max(dot(N, H2), 0.0), shininess) * specularProduct;
+
+    if(dot(L1, N) < 0.0){
+        specular1 = vec4(0.0, 0.0, 0.0, 1.0);
+    } 
+
+    if(dot(L2, N) < 0.0){
+        specular2 = vec4(0.0, 0.0, 0.0, 1.0);
+    } 
+
+    gl_Position = vPosition;
+    fColor = ambient + (diffuse1 + specular1) * firstSourceOn + (diffuse2 + specular2) * secondSourceOn;
+    
+    fColor.a = 1.0;
+  }
+</script>
+
+
+<script id="fragment-shader" type="x-shader/x-fragment">
+precision mediump float;
+   
+varying vec4 fColor;
+
+void
+main()
+{
+    gl_FragColor = fColor;
+}
+</script>
+
+<script type="text/javascript" src="../Common/webgl-utils.js"></script>
+<script type="text/javascript" src="../Common/initShaders.js"></script>
+<script type="text/javascript" src="../Common/MV.js"></script>
+<script type="text/javascript" src="assignment.js"></script>
+</head>   
+
+<body>
+
+<div style="float: left;">
+  <canvas id="gl-canvas" width="500" height="500" style="border: 1px solid #000">
+  Oops ... your browser doesn't support the HTML5 canvas element
+  </canvas>
+</div>
+<div style="clear: left;">
+  <div style="float: left; ">
+    <div style="float: left;">
+      <p>Turn on/off (source1)</p>
+      <input id="firstSourceOn" type="range" min="0" max="1" step="1" value="1" />
+    </div>
+    <br>
+    <div style="float: left;">
+      <p>Position X (source 1)</p>
+      <input id="posx1" type="range" min="0" max="200" step="10" value="100" />
+    </div>
+    <br>
+      <div style="float: left;">
+        <p>Position Y (source 1)</p>
+        <input id="posy1" type="range" min="0" max="200" step="10" value="100" />
+      </div>
+      <br>
+      <div style="float: left;">
+        <p>Position Z (source 1)</p>
+        <input id="posz1" type="range" min="0" max="200" step="10" value="100"   />
+      </div>
+    </div>
+  <div style="float: left; ">
+    <div style="float: left;">
+      <p>Turn on/off (source2)</p>
+      <input id="secondSourceOn" type="range" min="0" max="1" step="1" value="1" />
+    </div>
+    <br>
+    <div style="float: left;">
+      <p>Position X (source 2)</p>
+      <input id="posx2" type="range" min="0" max="200" step="10" value="100" />
+    </div>
+    <br>
+    <div style="float: left;">
+      <p>Position Y (source 2)</p>
+      <input id="posy2" type="range" min="0" max="200" step="10" value="100" />
+    </div>
+    <br>
+    <div style="float: left;">
+      <p>Position Z (source 2)</p>
+      <input id="posz2" type="range" min="0" max="200" step="10" value="100"   />
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
+

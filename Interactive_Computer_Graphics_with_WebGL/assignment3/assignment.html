@@ -1,0 +1,96 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+<title>Third assigment</title>
+
+
+<script id="vertex-shader" type="x-shader/x-vertex">
+attribute vec4 vPosition;
+attribute vec4 vColor;
+varying vec4 fColor;
+
+void main()
+{
+  fColor = vColor;
+  gl_Position = vPosition;
+}
+</script>
+
+<script id="fragment-shader" type="x-shader/x-fragment">
+precision mediump float;
+   
+varying vec4 fColor;
+
+void
+main()
+{
+    gl_FragColor = fColor;
+}
+</script>
+
+<script type="text/javascript" src="../Common/webgl-utils.js"></script>
+<script type="text/javascript" src="../Common/initShaders.js"></script>
+<script type="text/javascript" src="../Common/MV.js"></script>
+<script type="text/javascript" src="assignment.js"></script>
+</head>   
+
+<body>
+
+<div style="float: left;">
+  <canvas id="gl-canvas" width="500" height="500" style="border: 1px solid #000">
+  Oops ... your browser doesn't support the HTML5 canvas element
+  </canvas>
+</div>
+
+<div style="float: left; clear: left;">
+  <div style="float: left;">
+    <select id="mymenu">
+      <option value="sphere">Sphere</option>
+      <option value="cone">Cone</option>
+    </select>
+  </div>
+  <div style="float: left;">
+    <input id="next" type="submit" value="Create next element">
+  </div>
+</div>
+
+<div style="float: left; clear: left;">
+  <div style="float: left;">
+    <p>Size</p>
+    <input id="size" type="range" min="1" max="10" step="1" value="5" />
+  </div>
+
+  <div style="float: left;">
+    <p>Position X</p>
+    <input id="posx" type="range" min="0" max="200" step="1" value="100" />
+  </div>
+
+  <div style="float: left;">
+    <p>Position Y</p>
+    <input id="posy" type="range" min="0" max="200" step="1" value="100" />
+  </div>
+
+</div>
+
+<div style="float: left; clear: left;">
+  <div style="float: left;">
+    <p>Angle X</p>
+    <input id="anglex" type="range" min="0" max="360" step="10" value="180" />
+  </div>
+
+  <div style="float: left;">
+    <p>Angle Y</p>
+    <input id="angley" type="range" min="0" max="360" step="10" value="180" />
+  </div>
+
+  <div style="float: left;">
+    <p>Angle Z</p>
+    <input id="anglez" type="range" min="0" max="360" step="10" value="180" />
+  </div>
+</div>
+
+</body>
+</html>
+
